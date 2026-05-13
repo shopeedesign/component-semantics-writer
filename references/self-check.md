@@ -29,13 +29,16 @@ Run this checklist before final delivery.
 - Examples do not combine incompatible semantics in one field.
 - Anatomy describes semantic slots and recommended composition, not internal DOM, unless source code was actually inspected.
 - If Anatomy uses a tree diagram, it includes a boundary note that generated code should follow Code Connect snippets and real APIs.
+- Anatomy is compact and does not duplicate full code examples, Figma variant mapping, or Code Connect snippets already covered elsewhere.
 
 ## Variant Rules
 
 - Variant rules use condition-first logic: “如果场景 X，则使用 Y”.
 - Visual state and semantic state are separated, especially hover/open/disabled/error/loading.
 - Error state always includes error copy or validation ownership.
-- Figma-to-code mappings are explicit when names differ.
+- Figma-to-code mappings are explicit when names differ, and there is only one canonical mapping table.
+- `Code Connect` metadata does not repeat the canonical mapping table; it only states connection status, source-link availability, or a short list of mapped component names.
+- Add-on/content sections contain usage boundaries and If-Then rules, not repeated Figma/code mapping blocks.
 
 ## High-Risk Props
 

@@ -102,7 +102,11 @@ Storybook Path:
 
 - Use “如果…则…” rules for variant and component selection.
 - Keep visual descriptions minimal. Preserve decision logic, semantic boundaries, and mapping rules.
+- Avoid duplicate mapping tables. Keep one canonical Figma / semantic / code mapping table in `Variant Selection`; do not repeat the same mapping under `Code Connect`, `Anatomy`, or add-on sections.
+- In `Code Connect`, state connection status and source-link availability only. If useful, list mapped component names briefly; do not expand a full Figma-to-code coverage table when `Variant Selection` already has one.
 - In `Anatomy`, describe semantic slots, ownership, and recommended composition, not source-code DOM. Add a boundary note when using tree diagrams.
+- Keep `Anatomy` compact. Do not include full usage examples unless the component's slot structure would otherwise be ambiguous.
+- In content/add-on sections, write usage boundaries and If-Then selection rules only. Do not repeat the canonical mapping table.
 - Distinguish component family from concrete subcomponents.
   - Example: `Input` is a family; `Input / Base` is single-line text.
 - Use alias mapping when synonyms span multiple subcomponents.
@@ -140,7 +144,7 @@ Ask this before generating a component semantic document:
 ### Metadata
 
 - `Component ID`: use package/component identity, e.g. `ssc-ui-react/Input`.
-- `Code Connect`: leave blank unless verified.
+- `Code Connect`: leave blank unless verified. If verified, keep it concise, e.g. `已连接 React Code Connect，可返回代码片段；源码跳转链接暂未配置。`
 - `Figma Link`: link to the canonical component frame or component set.
 - `Storybook Path`: link to the docs page.
 
@@ -172,14 +176,29 @@ Use `Anatomy` to show semantic slots and composition ownership. Unless the real 
 以下结构描述组件的语义槽位和推荐组合关系，不代表源码内部 DOM 结构；生成代码时应以 Code Connect snippet 和真实 API 为准。
 ```
 
-### Figma-Code Mapping
-
-Use a mapping block when Figma naming, semantic naming, and code props differ:
+Keep the structure short:
 
 ```text
-内部前缀 / 内部后缀 -> Figma: Type=prefix text / Type=suffix text -> Code: prefix / suffix
-外部前置元素 / 外部后置元素 -> Figma: Input / Prepend Label -> Code: prepend / append
+Component
+├── semantic slot
+├── optional action
+└── feedback / validation owner
 ```
+
+Do not duplicate Figma variant names or Code Connect snippets here; put those in the canonical mapping table under `Variant Selection`.
+
+### Figma-Code Mapping
+
+Use one canonical mapping table under `Variant Selection` when Figma naming, semantic naming, and code props differ:
+
+```markdown
+| 语义目标 | Figma 选择 | Code / Code Connect |
+| --- | --- | --- |
+| 内部前缀 | `Type=prefix text` | `prefix` |
+| 外部前置元素 | `Input / Prepend Label` | `prepend` |
+```
+
+After this table exists, later sections should refer to the semantic names and write only decision rules, not repeat the mapping.
 
 ## Handling Review Feedback
 
