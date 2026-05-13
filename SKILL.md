@@ -11,16 +11,29 @@ Create concise, AI-friendly component semantic documentation that helps future A
 
 Use Chinese for natural-language content by default when the user writes in Chinese. Keep component names, prop names, Figma variant values, file paths, links, and code identifiers in their original language.
 
+## Default Sources
+
+Use these SSC UI sources by default when the user asks for an SSC component semantic document and does not provide overrides:
+
+- Figma Library: `https://www.figma.com/design/nkFgp5CZyxcE7CB399pYd0/PC-Library-%E9%87%8D%E6%9E%84`
+- Figma file key: `nkFgp5CZyxcE7CB399pYd0`
+- Documentation root: `https://shopee.git-pages.garena.com/bg-logistics/sscfe/business/base/ssc-ui/ssc-ui-react/#/components`
+- Documentation path pattern: `/record/<component-kebab-name>` for record/data-entry components when applicable.
+
+Do not require the local component code package by default. If no local code package or repository path is provided, rely on verified Figma, Code Connect, documentation site, and generated API metadata, then state that source code was not inspected.
+
 ## Workflow
 
 1. Ask for optional module-specific reference materials before writing:
    - Ask whether the user has extra materials for `Semantic Intent`, `Contexts`, `Content Guidelines`, and `Best Practices`.
-   - Use one concise prompt. If the user says there are no extra materials, continue with available Figma, docs, and code evidence.
+   - Use one concise prompt. Mention that the default SSC UI Figma Library and documentation site will be used unless the user provides replacements.
+   - If the user says there are no extra materials, continue with available Figma, docs, Code Connect, and code evidence.
    - Treat user-provided module references as guidance for those modules only; do not use them to override verified component API, Figma variants, or Code Connect facts.
 2. Gather component evidence from all available sources:
-   - Figma Library: component sets, variants, component properties, slots, instance examples.
-   - Documentation site: usage examples, API tables, caveats, demo descriptions.
-   - Code package: props interfaces, exports, deprecated props, default values, internal naming.
+   - Figma Library: use the default SSC UI file unless the user provides another Figma file. Inspect component sets, variants, component properties, slots, and instance examples.
+   - Documentation site: use the default SSC UI documentation root unless the user provides another docs site. Inspect usage examples, API tables, caveats, and demo descriptions.
+   - Code Connect: if present, inspect mappings/snippets and source links.
+   - Code package: optional. Inspect props interfaces, exports, deprecated props, default values, and internal naming only when a local package or repository path is provided.
 3. Separate facts from recommendations:
    - If a prop exists in code but is semantically risky, keep it and add usage boundaries.
    - If a prop is not verified, do not present it as code truth.
@@ -110,7 +123,7 @@ Ask this before generating a component semantic document:
 3. 文案规范 (Content Guidelines)
 4. 最佳实践 (Best Practices)
 
-如果有，请按模块补充链接、文档或要点；如果没有，我会基于 Figma、文档站和代码/API 证据继续生成。
+如果有，请按模块补充链接、文档或要点；如果没有，我会默认使用 SSC UI 的 Figma Library 和文档站，并结合 Code Connect / API metadata 继续生成。
 ```
 
 ### Metadata
