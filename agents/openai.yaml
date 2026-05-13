@@ -1,0 +1,4 @@
+interface:
+  display_name: "Component Semantics Writer"
+  short_description: "Generate AI-friendly component semantic docs"
+  default_prompt: "Use $component-semantics-writer to generate an AI-friendly semantic Markdown document for this component."
