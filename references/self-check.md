@@ -10,6 +10,8 @@ Run this checklist before final delivery.
 
 ## Evidence
 
+- The user was asked whether they have extra references for `Semantic Intent`, `Contexts`, `Content Guidelines`, and `Best Practices`.
+- User-provided module references are used only for the relevant modules and do not override verified API, Figma, or Code Connect facts.
 - Every code prop mentioned as real has been verified from source, generated API metadata, or official component docs.
 - Deprecated props are labeled and replacement props are named.
 - Figma component set names and variant values match the actual library.

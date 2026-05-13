@@ -13,17 +13,21 @@ Use Chinese for natural-language content by default when the user writes in Chin
 
 ## Workflow
 
-1. Gather component evidence from all available sources:
+1. Ask for optional module-specific reference materials before writing:
+   - Ask whether the user has extra materials for `Semantic Intent`, `Contexts`, `Content Guidelines`, and `Best Practices`.
+   - Use one concise prompt. If the user says there are no extra materials, continue with available Figma, docs, and code evidence.
+   - Treat user-provided module references as guidance for those modules only; do not use them to override verified component API, Figma variants, or Code Connect facts.
+2. Gather component evidence from all available sources:
    - Figma Library: component sets, variants, component properties, slots, instance examples.
    - Documentation site: usage examples, API tables, caveats, demo descriptions.
    - Code package: props interfaces, exports, deprecated props, default values, internal naming.
-2. Separate facts from recommendations:
+3. Separate facts from recommendations:
    - If a prop exists in code but is semantically risky, keep it and add usage boundaries.
    - If a prop is not verified, do not present it as code truth.
    - If Figma naming is awkward but current, document the mapping and recommend future cleanup separately.
-3. Write the Markdown using the required section order.
-4. Run the semantic self-check in `references/self-check.md`.
-5. Save the file as `<ComponentName>.component-semantics.md` unless the user asks for inline output.
+4. Write the Markdown using the required section order.
+5. Run the semantic self-check in `references/self-check.md`.
+6. Save the file as `<ComponentName>.component-semantics.md` unless the user asks for inline output.
 
 ## Evidence Rules
 
@@ -93,6 +97,21 @@ Storybook Path:
 - Treat loading, ellipsis, custom render, search, and add-new features as high-risk affordances: verify they exist and add usage boundaries.
 
 ## Useful Patterns
+
+### Reference Intake Prompt
+
+Ask this before generating a component semantic document:
+
+```text
+在生成这个组件的语义化文档前，你是否有以下模块的补充资料需要我参考？
+
+1. 语义与意图 (Semantic Intent)
+2. 组件适用上下文 (Contexts)
+3. 文案规范 (Content Guidelines)
+4. 最佳实践 (Best Practices)
+
+如果有，请按模块补充链接、文档或要点；如果没有，我会基于 Figma、文档站和代码/API 证据继续生成。
+```
 
 ### Metadata
 
