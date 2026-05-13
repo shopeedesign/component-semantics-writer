@@ -20,27 +20,31 @@ Use these SSC UI sources by default when the user asks for an SSC component sema
 - Documentation root: `https://shopee.git-pages.garena.com/bg-logistics/sscfe/business/base/ssc-ui/ssc-ui-react/#/components`
 - Documentation path pattern: `/record/<component-kebab-name>` for record/data-entry components when applicable.
 
-Do not require the local component code package by default. If no local code package or repository path is provided, rely on verified Figma, Code Connect, documentation site, and generated API metadata, then state that source code was not inspected.
+Do not store a local component code package path in this public skill. On first use in a new conversation or for a new component library, guide the user to upload/attach the local component code package or provide a local repository path. If the user cannot provide it because the package is too large or unavailable, continue with verified Figma, Code Connect, documentation site, and generated API metadata, then state that source code was not inspected.
 
 ## Workflow
 
-1. Ask for optional module-specific reference materials before writing:
+1. Run first-use source intake:
+   - If no local code package or repository path is already known in the conversation, ask the user to upload/attach the component code package or provide a local repo/path.
+   - Explain that the code package improves prop accuracy, default values, deprecated API detection, exports, and source-level caveats.
+   - If the user says the package is too large or unavailable, continue without blocking and mark source code as not inspected in the final document.
+2. Ask for optional module-specific reference materials before writing:
    - Ask whether the user has extra materials for `Semantic Intent`, `Contexts`, `Content Guidelines`, and `Best Practices`.
    - Use one concise prompt. Mention that the default SSC UI Figma Library and documentation site will be used unless the user provides replacements.
    - If the user says there are no extra materials, continue with available Figma, docs, Code Connect, and code evidence.
    - Treat user-provided module references as guidance for those modules only; do not use them to override verified component API, Figma variants, or Code Connect facts.
-2. Gather component evidence from all available sources:
+3. Gather component evidence from all available sources:
    - Figma Library: use the default SSC UI file unless the user provides another Figma file. Inspect component sets, variants, component properties, slots, and instance examples.
    - Documentation site: use the default SSC UI documentation root unless the user provides another docs site. Inspect usage examples, API tables, caveats, and demo descriptions.
    - Code Connect: if present, inspect mappings/snippets and source links.
    - Code package: optional. Inspect props interfaces, exports, deprecated props, default values, and internal naming only when a local package or repository path is provided.
-3. Separate facts from recommendations:
+4. Separate facts from recommendations:
    - If a prop exists in code but is semantically risky, keep it and add usage boundaries.
    - If a prop is not verified, do not present it as code truth.
    - If Figma naming is awkward but current, document the mapping and recommend future cleanup separately.
-4. Write the Markdown using the required section order.
-5. Run the semantic self-check in `references/self-check.md`.
-6. Save the file as `<ComponentName>.component-semantics.md` unless the user asks for inline output.
+5. Write the Markdown using the required section order.
+6. Run the semantic self-check in `references/self-check.md`.
+7. Save the file as `<ComponentName>.component-semantics.md` unless the user asks for inline output.
 
 ## Evidence Rules
 
@@ -116,12 +120,19 @@ Storybook Path:
 Ask this before generating a component semantic document:
 
 ```text
-在生成这个组件的语义化文档前，你是否有以下模块的补充资料需要我参考？
+在生成这个组件的语义化文档前，请先确认两类资料：
 
-1. 语义与意图 (Semantic Intent)
-2. 组件适用上下文 (Contexts)
-3. 文案规范 (Content Guidelines)
-4. 最佳实践 (Best Practices)
+1. 本地组件代码包 / 仓库路径
+   - 如果方便，请上传本地代码包，或提供本地 repo/path。
+   - 代码包可帮助我核对真实 props、默认值、废弃 API、exports 和源码级 caveat。
+   - 如果代码包太大或暂时没有，我会继续基于 Figma、文档站、Code Connect / API metadata 生成，并标注“未检查源码”。
+
+2. 以下模块是否有补充资料需要我参考？
+
+   - 语义与意图 (Semantic Intent)
+   - 组件适用上下文 (Contexts)
+   - 文案规范 (Content Guidelines)
+   - 最佳实践 (Best Practices)
 
 如果有，请按模块补充链接、文档或要点；如果没有，我会默认使用 SSC UI 的 Figma Library 和文档站，并结合 Code Connect / API metadata 继续生成。
 ```

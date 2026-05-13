@@ -10,10 +10,11 @@ Run this checklist before final delivery.
 
 ## Evidence
 
+- On first use in a new conversation or for a new component library, the user was guided to upload/attach a local code package or provide a local repo/path.
+- If no code package or repo path was provided, source-code-level claims were avoided and the output says source code was not inspected.
 - The user was asked whether they have extra references for `Semantic Intent`, `Contexts`, `Content Guidelines`, and `Best Practices`.
 - User-provided module references are used only for the relevant modules and do not override verified API, Figma, or Code Connect facts.
 - Default SSC UI Figma and documentation sources were used, or user-provided replacement sources were recorded.
-- If no local code package was provided, the output says source code was not inspected and avoids source-only claims.
 - Every code prop mentioned as real has been verified from source, generated API metadata, or official component docs.
 - Deprecated props are labeled and replacement props are named.
 - Figma component set names and variant values match the actual library.
