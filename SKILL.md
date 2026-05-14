@@ -36,7 +36,7 @@ Do not store a local component code package path in this public skill. On first 
 3. Gather component evidence from all available sources:
    - Figma Library: use the default SSC UI file unless the user provides another Figma file. Inspect component sets, variants, component properties, slots, and instance examples.
    - Documentation site: use the default SSC UI documentation root unless the user provides another docs site. Inspect usage examples, API tables, caveats, and demo descriptions.
-   - Code Connect: if present, inspect mappings/snippets and source links.
+   - Code Connect: if Figma Library is available, do not judge connection status from local repo search or `search_design_system` alone. First run node-level checks with `get_design_context` or `get_code_connect_map` on representative Figma component instances/nodes. If snippets are returned, record Code Connect as connected; if snippets exist but `source` is empty, state that source-link paths are unavailable.
    - Code package: optional. Inspect props interfaces, exports, deprecated props, default values, and internal naming only when a local package or repository path is provided.
 4. Separate facts from recommendations:
    - If a prop exists in code but is semantically risky, keep it and add usage boundaries.
@@ -52,6 +52,9 @@ Do not store a local component code package path in this public skill. On first 
 - For dumi/Storybook static sites, inspect bundled JS when pages are static-rendered or route-based.
 - For Figma writes or unique Figma reads, load `figma-use` before `use_figma`.
 - For Figma Library analysis, inspect component sets and component property definitions. Focus on variant axes and designer-facing component names.
+- Do not mark `Code Connect:` blank solely because no local `.figma.*` / `figma.config` files exist or because `search_design_system` lacks snippet data.
+- When Figma Library is available, verify Code Connect with node-level `get_design_context` or `get_code_connect_map` on representative component instances/nodes before deciding connection status.
+- If node-level tools return `CodeConnectSnippet` or snippet metadata, mark Code Connect as connected. If the snippet `source` is empty, say snippets are available but source-link paths are unavailable.
 - Do not infer internal DOM structure unless source code has been inspected. Treat `Anatomy` as semantic slots and recommended composition by default.
 - If local code package is missing, say so and rely only on verified docs/Figma data.
 - Never invent Code Connect links. Leave `Code Connect:` blank if not available.
@@ -144,7 +147,7 @@ Ask this before generating a component semantic document:
 ### Metadata
 
 - `Component ID`: use package/component identity, e.g. `ssc-ui-react/Input`.
-- `Code Connect`: leave blank unless verified. If verified, keep it concise, e.g. `已连接 React Code Connect，可返回代码片段；源码跳转链接暂未配置。`
+- `Code Connect`: leave blank only after node-level Figma checks confirm no snippet/mapping. If verified, keep it concise, e.g. `已连接 React Code Connect，可返回代码片段；源码跳转链接暂未配置。`
 - `Figma Link`: link to the canonical component frame or component set.
 - `Storybook Path`: link to the docs page.
 

@@ -18,6 +18,8 @@ Run this checklist before final delivery.
 - Every code prop mentioned as real has been verified from source, generated API metadata, or official component docs.
 - Deprecated props are labeled and replacement props are named.
 - Figma component set names and variant values match the actual library.
+- `Code Connect:` is blank only if node-level `get_design_context` / `get_code_connect_map` checks found no snippet or mapping.
+- If node-level Figma checks return snippets but empty `source`, the document says Code Connect is connected but source-link paths are unavailable.
 - If evidence is missing, the document says so instead of pretending.
 
 ## Semantics
@@ -37,7 +39,7 @@ Run this checklist before final delivery.
 - Visual state and semantic state are separated, especially hover/open/disabled/error/loading.
 - Error state always includes error copy or validation ownership.
 - Figma-to-code mappings are explicit when names differ, and there is only one canonical mapping table.
-- `Code Connect` metadata does not repeat the canonical mapping table; it only states connection status, source-link availability, or a short list of mapped component names.
+- `Code Connect` metadata does not repeat the canonical mapping table; it only states node-level verified connection status, source-link availability, or a short list of mapped component names.
 - Add-on/content sections contain usage boundaries and If-Then rules, not repeated Figma/code mapping blocks.
 
 ## High-Risk Props
@@ -63,6 +65,6 @@ Check these carefully before finalizing:
 ## Final Artifact
 
 - File name follows `<ComponentName>.component-semantics.md`.
-- `Code Connect:` is blank unless verified.
+- `Code Connect:` is blank only after node-level Figma checks found no snippet or mapping.
 - Links are current and point to the most relevant component page or Figma node.
 - The final answer mentions any unavailable source, such as missing local code package.
