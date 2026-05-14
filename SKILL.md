@@ -36,7 +36,7 @@ Do not store a local component code package path in this public skill. On first 
 3. Gather component evidence from all available sources:
    - Figma Library: use the default SSC UI file unless the user provides another Figma file. Inspect component sets, variants, component properties, slots, and instance examples.
    - Documentation site: use the default SSC UI documentation root unless the user provides another docs site. Inspect usage examples, API tables, caveats, and demo descriptions.
-   - Code Connect: if Figma Library is available, do not judge connection status from local repo search or `search_design_system` alone. First run node-level checks with `get_design_context` or `get_code_connect_map` on representative Figma component instances/nodes. If snippets are returned, record Code Connect as connected; if snippets exist but `source` is empty, state that source-link paths are unavailable.
+   - Code Connect: if Figma Library is available, do not judge connection status from local repo search, example frames, generated screens, or `search_design_system` alone. Verify the Library asset itself: use `search_design_system` to record `assetType` and `componentKey`; if `assetType=component`, resolve the key through Figma REST `/v1/files/:fileKey/components`; if `assetType=component_set`, resolve it through `/v1/files/:fileKey/component_sets`; match the returned `key` to get the real `node_id`; then run `get_code_connect_map` or `get_design_context` on that Library `node_id`. Use example frames or generated screens only as secondary composition evidence, never as the source of truth for Library Code Connect. If snippets are returned, record Code Connect as connected; if snippets exist but `source` is empty, state that source-link paths are unavailable.
    - Code package: optional. Inspect props interfaces, exports, deprecated props, default values, and internal naming only when a local package or repository path is provided.
 4. Separate facts from recommendations:
    - If a prop exists in code but is semantically risky, keep it and add usage boundaries.
@@ -53,7 +53,8 @@ Do not store a local component code package path in this public skill. On first 
 - For Figma writes or unique Figma reads, load `figma-use` before `use_figma`.
 - For Figma Library analysis, inspect component sets and component property definitions. Focus on variant axes and designer-facing component names.
 - Do not mark `Code Connect:` blank solely because no local `.figma.*` / `figma.config` files exist or because `search_design_system` lacks snippet data.
-- When Figma Library is available, verify Code Connect with node-level `get_design_context` or `get_code_connect_map` on representative component instances/nodes before deciding connection status.
+- When Figma Library is available, resolve Library assets from `componentKey` to real `node_id` before Code Connect verification. `componentKey` is not a `nodeId`; `get_code_connect_map` requires a node id like `123:456`. Use Figma REST `/v1/files/:fileKey/components` for `assetType=component` and `/v1/files/:fileKey/component_sets` for `assetType=component_set`, then call `get_code_connect_map` or `get_design_context` on the resolved Library `node_id`.
+- Do not substitute canvas examples, generated screens, or component consumers for the Library component body when judging Library Code Connect. If REST lookup is unavailable, state that Library component node resolution was unavailable and treat example-frame results as secondary evidence only.
 - If node-level tools return `CodeConnectSnippet` or snippet metadata, mark Code Connect as connected. If the snippet `source` is empty, say snippets are available but source-link paths are unavailable.
 - Do not infer internal DOM structure unless source code has been inspected. Treat `Anatomy` as semantic slots and recommended composition by default.
 - If local code package is missing, say so and rely only on verified docs/Figma data.
@@ -121,6 +122,18 @@ Storybook Path:
 - Treat loading, ellipsis, custom render, search, and add-new features as high-risk affordances: verify they exist and add usage boundaries.
 
 ## Useful Patterns
+
+### Code Connect Node Resolution
+
+Use this exact order when Figma Library assets are available:
+
+1. Run `search_design_system` for the target component and keep `assetType` + `componentKey`.
+2. Resolve `componentKey` to a real Figma node id:
+   - `assetType=component` -> Figma REST `/v1/files/:fileKey/components`
+   - `assetType=component_set` -> Figma REST `/v1/files/:fileKey/component_sets`
+3. Match the returned `key` to get `node_id`.
+4. Run `get_code_connect_map` or `get_design_context` on that resolved Library `node_id`.
+5. Mark the component connected only when the returned snippet/mapping belongs to the target component family. Child snippets inside a demo frame do not prove the parent component is connected.
 
 ### Reference Intake Prompt
 
